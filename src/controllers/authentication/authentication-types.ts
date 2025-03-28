@@ -15,7 +15,7 @@ export type LogInWithUsernameAndPasswordResult = {
   user: User;
 };
 
-export enum LogInWtihUsernameAndPasswordError {
+export enum LogInWithUsernameAndPasswordError {
   INCORRECT_USERNAME_OR_PASSWORD = "INCORRECT_USERNAME_OR_PASSWORD",
   UNKNOWN = "UNKNOWN",
 }
