@@ -1,25 +1,11 @@
 {
-  "name": "hackernews-server",
-  "version": "1.0.0",
-  "type": "module",
-  "scripts": {
-    "dev": "tsx watch src/index.ts",
-    "build": "tsc -p tsconfig.build.json",
-    "start": "node dist/index.js"
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "outDir": "./dist",
+    "module": "ESNext",
+    "target": "ES2020",
+    "allowImportingTsExtensions": false
   },
-  "dependencies": {
-    "@hono/node-server": "^1.14.0",
-    "@prisma/client": "^6.5.0",
-    "dotenv": "^16.4.7",
-    "hono": "^4.7.5",
-    "jsonwebtoken": "^9.0.2",
-    "tsx": "^4.7.1"
-  },
-  "devDependencies": {
-    "@types/node": "^20.11.17",
-    "@types/jsonwebtoken": "^9.0.9",
-    "prisma": "^6.5.0",
-    "tsx": "^4.7.1",
-    "typescript": "^5.4.0"
-  }
+  "include": ["src"]
 }
