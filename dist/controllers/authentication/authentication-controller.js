@@ -1,8 +1,7 @@
 import { createHash } from "crypto";
 import { LogInWithUsernameAndPasswordError, SignUpWithUsernameAndPasswordError, } from "./authentication-types.js";
 import { prisma } from "../../extras/prisma.js";
-//import jwt from "jsonwebtoken";
-import * as jwt from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import { jwtSecretKey } from "../../environment.js";
 export const createPasswordHash = (parameters) => {
     return createHash("sha256").update(parameters.password).digest("hex");

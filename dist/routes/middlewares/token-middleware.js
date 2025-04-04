@@ -1,6 +1,5 @@
 import { createMiddleware } from "hono/factory";
-//import jwt from "jsonwebtoken";
-import * as jwt from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import { jwtSecretKey } from "../../environment.js";
 export const tokenMiddleware = createMiddleware(async (context, next) => {
     const token = context.req.header("token");

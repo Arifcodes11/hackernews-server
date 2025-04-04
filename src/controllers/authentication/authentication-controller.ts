@@ -4,7 +4,7 @@ import {
   SignUpWithUsernameAndPasswordError,
   type LogInWithUsernameAndPasswordResult,
   type SignUpWithUsernameAndPasswordResult,
-} from "./authentication-types";
+} from "./authentication-types.js";
 import { prisma } from "../../extras/prisma.js";
 import jwt from "jsonwebtoken";
 import { jwtSecretKey } from "../../environment.js";
