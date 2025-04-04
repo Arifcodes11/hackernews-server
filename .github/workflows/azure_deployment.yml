@@ -10,9 +10,9 @@ env:
   RESOURCE_GROUP: HackerNews
   CONTAINER_APPS_ENVIRONMENT: HackerNewsContainerAppsEnvironment
   LOG_ANALYTICS_WORKSPACE: HackerNewsLogAnalyticsWorkspace
-  ACR_REGISTRY: HackerNews1SI22CS402.azurecr.io # This has to be unique (at least the `erbium` bit)
+  ACR_REGISTRY: hackernews1si22cs402.azurecr.io
   ACR_REPOSITORY_NAME: hackernews
-  CONTAINER_APP_NAME: HackerNewsContainerApp
+  CONTAINER_APP_NAME: hackernews
   TARGET_PORT: 3000
 
 jobs:
