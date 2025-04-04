@@ -1,10 +1,10 @@
-import { getPagination } from "../../extras/pagination";
-import { prisma } from "../../extras/prisma";
+import { getPagination } from "../../extras/pagination.js";
+import { prisma } from "../../extras/prisma.js";
 import {
   CommentStatus,
   type CreateCommentResult,
   type CommentResult,
-} from "./comments-type.ts";
+} from "./comments-type.js";
 
 export const createComment = async (params: {
   content: string;

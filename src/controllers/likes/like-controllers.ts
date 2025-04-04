@@ -1,6 +1,6 @@
-import { getPagination } from "../../extras/pagination";
-import { prisma } from "../../extras/prisma";
-import { LikeStatus, type GetLikesResult, type LikeCreate } from "./like-types";
+import { getPagination } from "../../extras/pagination.js";
+import { prisma } from "../../extras/prisma.js";
+import { LikeStatus, type GetLikesResult, type LikeCreate } from "./like-types.js";
 
 // Function to create a like on a post
 export const createLike = async (params: {

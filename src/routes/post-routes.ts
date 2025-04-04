@@ -1,16 +1,16 @@
 import { Hono } from "hono";
-import { tokenMiddleware } from "./middlewares/token-middleware";
+import { tokenMiddleware } from "./middlewares/token-middleware.js";
 import {
   createPost,
   deletePost,
   getAllPosts,
   getPostsByUser,
-} from "../controllers/posts/post-contoller";
+} from "../controllers/posts/post-contoller.js";
 import {
   DeletePostError,
   GetPostsError,
   PostStatus,
-} from "../controllers/posts/post-type";
+} from "../controllers/posts/post-type.js";
 
 export const postsRoutes = new Hono();
 postsRoutes.post("/", tokenMiddleware, async (context) => {

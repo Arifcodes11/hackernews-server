@@ -1,6 +1,6 @@
 import { createMiddleware } from "hono/factory";
 import jwt from "jsonwebtoken";
-import { jwtSecretKey } from "../../../environment";
+import { jwtSecretKey } from "../../environment.js";
 
 export const tokenMiddleware = createMiddleware<{
   Variables: {

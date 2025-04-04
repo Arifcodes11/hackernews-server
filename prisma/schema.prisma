@@ -1,3 +1,9 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -10,45 +16,43 @@ datasource db {
 
 model User {
   id        String    @id @default(uuid())
-  username  String    @unique
+  username     String    @unique
   name      String?
   password  String
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
-  Post      Post[]
+  posts     Post[]
   Like      Like[]
   Comment   Comment[]
 }
 
 model Post {
-  id        String    @id @default(uuid())
+  id        String   @id @default(uuid())
   title     String
-  content   String?
-  userId    String
-  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  createdAt DateTime  @default(now())
+  content   String
+  createdAt DateTime @default(now())
   updatedAt DateTime  @updatedAt
+  userId    String
+  author    User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   Like      Like[]
   Comment   Comment[]
 }
 
 model Like {
   id        String   @id @default(uuid())
-  postId    String
-  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId    String
+  user      User     @relation(fields: [userId], references: [id],onDelete: Cascade)
+  userId    String
 }
 
 model Comment {
   id        String   @id @default(uuid())
   content   String
-  postId    String
-  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  post      Post     @relation(fields: [postId], references: [id],onDelete: Cascade)
+  postId    String
+  user      User     @relation(fields: [userId], references: [id],onDelete: Cascade)
+  userId    String
 }

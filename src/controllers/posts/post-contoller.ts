@@ -1,12 +1,12 @@
-import { getPagination } from "../../extras/pagination";
-import { prisma } from "../../extras/prisma";
+import { getPagination } from "../../extras/pagination.js";
+import { prisma } from "../../extras/prisma.js";
 import {
   DeletePostError,
   GetPostsError,
   PostStatus,
   type GetPostsResult,
   type PostCreateResult,
-} from "./post-type"
+} from "./post-type.js";
 
 export const createPost = async (parameters: {
   title: string;
@@ -68,7 +68,7 @@ export const getAllPosts = async (parameters: {
   }
 };
 
-//Retrieve all the post of specific user
+//Retreive all the post of specific user
 export const getPostsByUser = async (parameters: {
   userId: string;
   page: number;

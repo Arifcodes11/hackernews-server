@@ -1,11 +1,11 @@
-import { getPagination } from "../../extras/pagination";
-import { prisma } from "../../extras/prisma";
+import { getPagination } from "../../extras/pagination.js";
+import { prisma } from "../../extras/prisma.js";
 import {
   GetAllUsersError,
   GetMeError,
   type GetAllUsersResult,
   type GetMeResult,
-} from "./users-types";
+} from "./users-types.js";
 
 export const GetMe = async (parameters: {
   userId: string;

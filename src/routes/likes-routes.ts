@@ -2,9 +2,9 @@ import {
   createLike,
   deleteLikeOnPost,
   getLikesOnPost,
-} from "../controllers/likes/like-controllers";
-import { LikeStatus } from "../controllers/likes/like-types";
-import { tokenMiddleware } from "./middlewares/token-middleware";
+} from "../controllers/likes/like-controllers.js";
+import { LikeStatus } from "../controllers/likes/like-types.js";
+import { tokenMiddleware } from "./middlewares/token-middleware.js";
 import { Hono } from "hono";
 
 export const likeRoutes = new Hono();
