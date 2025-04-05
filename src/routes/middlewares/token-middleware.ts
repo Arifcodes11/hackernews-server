@@ -7,11 +7,13 @@ export const tokenMiddleware = createMiddleware<{
     userId: string;
   };
 }>(async (context, next) => {
-  const token = context.req.header("token");
+  const authHeader = context.req.header("Authorization");
 
-  if (!token) {
-    return context.json({ error: "Unauthorized" }, 401);
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return context.json({ message: "missing Token" }, 401);
   }
+
+  const token = authHeader.split(" ")[1];
 
   try {
     const payload = jwt.verify(token, jwtSecretKey) as jwt.JwtPayload;
@@ -22,7 +24,7 @@ export const tokenMiddleware = createMiddleware<{
     }
 
     await next();
-  } catch (error) {
-    return context.json({ error: "Unauthorized" }, 401);
+  } catch (e) {
+    return context.json({ message: "Unauthorized token" }, 401);
   }
 });
