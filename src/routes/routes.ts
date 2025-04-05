@@ -16,3 +16,5 @@ allRoutes.route("/users", usersRoutes);
 allRoutes.route("/posts", postsRoutes);
 allRoutes.route("/likes", likeRoutes);
 allRoutes.route("/comments", commentRoutes);
+allRoutes.get("/doc", (c) => c.json(openapi));
+allRoutes.get("/ui", swaggerUI({ url: "/doc" }));
