@@ -8,6 +8,10 @@ import {
 import { prisma } from "../../extras/prisma.js";
 import jwt from "jsonwebtoken";
 import { jwtSecretKey } from "../../environment.js";
+// In authentication-controller.ts or elsewhere
+
+// In authentication-controller.ts or elsewhere
+//import type { LoginPayload } from './authentication-types'
 
 export const createPasswordHash = (parameters: {
   password: string;
