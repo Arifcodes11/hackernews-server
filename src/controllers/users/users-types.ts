@@ -5,15 +5,11 @@ export type GetMeResult = {
 };
 
 export enum GetMeError {
-  UNKNOWN = "UNKNOWN",
-  USER_NOT_FOUND = "USER_NOT_FOUND",
+  BAD_REQUEST,
 }
+
 
 export type GetAllUsersResult = {
   users: User[];
 };
 
-export enum GetAllUsersError {
-  NO_USERS_FOUND = "NO_USERS_FOUND",
-  UNKNOWN = "UNKNOWN",
-}

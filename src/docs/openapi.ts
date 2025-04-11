@@ -9,10 +9,10 @@ export const openapi: OpenAPIV3.Document = {
   },
   components: {
     securitySchemes: {
-      bearerAuth: {
-        type: "http",
-        scheme: "bearer",
-        bearerFormat: "JWT",
+      TokenAuth: {
+        type: "apiKey",
+        in: "header",
+        name: "token", 
       },
     },
     schemas: {
@@ -82,7 +82,7 @@ export const openapi: OpenAPIV3.Document = {
       get: {
         summary: "Get current user info",
         description: "Returns user details based on JWT token",
-        security: [{ bearerAuth: [] }],
+        security: [{ TokenAuth: [] }],
         responses: {
           "200": { description: "Current user data" },
           "401": { description: "Unauthorized" },
@@ -93,7 +93,7 @@ export const openapi: OpenAPIV3.Document = {
       get: {
         summary: "Get all users",
         description: "Returns users in alphabetical order (paginated)",
-        security: [{ bearerAuth: [] }],
+        security: [{ TokenAuth: [] }],
         responses: {
           "200": { description: "List of users" },
         },
@@ -103,7 +103,7 @@ export const openapi: OpenAPIV3.Document = {
       get: {
         summary: "Get all posts",
         description: "Returns posts in reverse chronological order (paginated)",
-        security: [{ bearerAuth: [] }],
+        security: [{ TokenAuth: [] }],
         responses: {
           "200": { description: "List of posts" },
         },
@@ -111,7 +111,7 @@ export const openapi: OpenAPIV3.Document = {
       post: {
         summary: "Create a post",
         description: "Creates a new post authored by the current user",
-        security: [{ bearerAuth: [] }],
+        security: [{ TokenAuth: [] }],
         requestBody: {
           required: true,
           content: {
@@ -131,7 +131,7 @@ export const openapi: OpenAPIV3.Document = {
         summary: "Get current user posts",
         description:
           "Returns current user posts in reverse chronological order",
-        security: [{ bearerAuth: [] }],
+        security: [{ TokenAuth: [] }],
         responses: {
           "200": { description: "List of user posts" },
         },
@@ -141,7 +141,7 @@ export const openapi: OpenAPIV3.Document = {
       delete: {
         summary: "Delete a post",
         description: "Deletes the post if it belongs to the current user",
-        security: [{ bearerAuth: [] }],
+        security: [{ TokenAuth: [] }],
         parameters: [
           {
             name: "postId",
@@ -160,7 +160,7 @@ export const openapi: OpenAPIV3.Document = {
       get: {
         summary: "Get likes on a post",
         description: "Returns likes in reverse chronological order (paginated)",
-        security: [{ bearerAuth: [] }],
+        security: [{ TokenAuth: [] }],
         parameters: [
           {
             name: "postId",
@@ -176,7 +176,7 @@ export const openapi: OpenAPIV3.Document = {
       post: {
         summary: "Like a post",
         description: "Likes a post if not already liked by the current user",
-        security: [{ bearerAuth: [] }],
+        security: [{ TokenAuth: [] }],
         parameters: [
           {
             name: "postId",
@@ -192,7 +192,7 @@ export const openapi: OpenAPIV3.Document = {
       delete: {
         summary: "Remove like from a post",
         description: "Deletes the user's like on a post if it exists",
-        security: [{ bearerAuth: [] }],
+        security: [{ TokenAuth: [] }],
         parameters: [
           {
             name: "postId",
@@ -211,7 +211,7 @@ export const openapi: OpenAPIV3.Document = {
         summary: "Get comments on a post",
         description:
           "Returns comments in reverse chronological order (paginated)",
-        security: [{ bearerAuth: [] }],
+        security: [{ TokenAuth: [] }],
         parameters: [
           {
             name: "postId",
@@ -227,7 +227,7 @@ export const openapi: OpenAPIV3.Document = {
       post: {
         summary: "Add comment to a post",
         description: "Adds a new comment on a post by the current user",
-        security: [{ bearerAuth: [] }],
+        security: [{ TokenAuth: [] }],
         parameters: [
           {
             name: "postId",
@@ -253,7 +253,7 @@ export const openapi: OpenAPIV3.Document = {
       delete: {
         summary: "Delete a comment",
         description: "Deletes a comment if authored by the current user",
-        security: [{ bearerAuth: [] }],
+        security: [{ TokenAuth: [] }],
         parameters: [
           {
             name: "commentId",
@@ -269,7 +269,7 @@ export const openapi: OpenAPIV3.Document = {
       patch: {
         summary: "Edit a comment",
         description: "Updates comment text if it belongs to current user",
-        security: [{ bearerAuth: [] }],
+        security: [{ TokenAuth: [] }],
         parameters: [
           {
             name: "commentId",

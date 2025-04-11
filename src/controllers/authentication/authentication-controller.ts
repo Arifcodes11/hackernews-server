@@ -5,24 +5,16 @@ import {
   type LogInWithUsernameAndPasswordResult,
   type SignUpWithUsernameAndPasswordResult,
 } from "./authentication-types.js";
-import { prisma } from "../../extras/prisma.js";
+
 import jwt from "jsonwebtoken";
 import { jwtSecretKey } from "../../environment.js";
-// In authentication-controller.ts or elsewhere
-
-// In authentication-controller.ts or elsewhere
-//import type { LoginPayload } from './authentication-types'
-
-export const createPasswordHash = (parameters: {
-  password: string;
-}): string => {
-  return createHash("sha256").update(parameters.password).digest("hex");
-};
+import { prismaClient } from "../../extras/prisma.js";
 
 const createJWToken = (parameters: {
   id: string;
   username: string;
 }): string => {
+  // Generate token
   const jwtPayload: jwt.JwtPayload = {
     iss: "https://purpleshorts.co.in",
     sub: parameters.id,
@@ -36,41 +28,55 @@ const createJWToken = (parameters: {
   return token;
 };
 
-export const signUpWithUsernameAndPassword = async (parameters: {
+export const checkIfUserExistsAlready = async (parameters: {
+  username: string;
+}): Promise<boolean> => {
+  const existingUser = await prismaClient.user.findUnique({
+    where: {
+      username: parameters.username,
+    },
+  });
+
+  if (existingUser) {
+    return true;
+  }
+
+  return false;
+};
+
+export const createPasswordHash = (parameters: {
+  password: string;
+}): string => {
+  return createHash("sha256").update(parameters.password).digest("hex");
+};
+
+export const signUpWithUsernameAndpassword = async (parameters: {
   username: string;
   password: string;
-  name: string;
 }): Promise<SignUpWithUsernameAndPasswordResult> => {
   try {
-    const existingUser = await prisma.user.findUnique({
-      where: {
-        username: parameters.username,
-      },
+    const isUserExistingAlready = await checkIfUserExistsAlready({
+      username: parameters.username,
     });
 
-    if (existingUser) {
+    if (isUserExistingAlready) {
       throw SignUpWithUsernameAndPasswordError.CONFLICTING_USERNAME;
     }
 
-    const hashedPassword = createPasswordHash({
+    const passwordHash = createPasswordHash({
       password: parameters.password,
     });
-    const user = await prisma.user.create({
+
+    const user = await prismaClient.user.create({
       data: {
         username: parameters.username,
-        password: hashedPassword,
-        name: parameters.name,
+        password: passwordHash,
       },
     });
 
-    const jwtPayload: jwt.JwtPayload = {
-      iss: "http://purpleshorts.co.in",
-      sub: user.id,
+    const token = createJWToken({
+      id: user.id,
       username: user.username,
-    };
-
-    const token = jwt.sign(jwtPayload, jwtSecretKey, {
-      expiresIn: "30d",
     });
 
     const result: SignUpWithUsernameAndPasswordResult = {
@@ -80,7 +86,7 @@ export const signUpWithUsernameAndPassword = async (parameters: {
 
     return result;
   } catch (e) {
-    console.error(e);
+    console.log("Error", e);
     throw SignUpWithUsernameAndPasswordError.UNKNOWN;
   }
 };
@@ -93,7 +99,7 @@ export const logInWithUsernameAndPassword = async (parameters: {
     password: parameters.password,
   });
 
-  const user = await prisma.user.findUnique({
+  const user = await prismaClient.user.findUnique({
     where: {
       username: parameters.username,
       password: passwordHash,
@@ -109,10 +115,8 @@ export const logInWithUsernameAndPassword = async (parameters: {
     username: user.username,
   });
 
-  const result: LogInWithUsernameAndPasswordResult = {
+  return {
     token,
     user,
   };
-
-  return result;
 };

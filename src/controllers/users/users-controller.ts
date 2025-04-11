@@ -1,55 +1,28 @@
-import { getPagination } from "../../extras/pagination.js";
-import { prisma } from "../../extras/prisma.js";
-import {
-  GetAllUsersError,
-  GetMeError,
-  type GetAllUsersResult,
-  type GetMeResult,
-} from "./users-types.js";
+import { prismaClient } from "../../extras/prisma.js";
+import { GetMeError,  type GetAllUsersResult, type GetMeResult,  } from "./users-types.js";
 
-export const GetMe = async (parameters: {
-  userId: string;
-}): Promise<GetMeResult> => {
-  try {
-    const user = await prisma.user.findUnique({
-      where: { id: parameters.userId },
-    });
+export const getMe = async (parameters: { userId: string }): Promise<GetMeResult> => {
+  const user = await prismaClient.user.findUnique({
+    where: {
+      id: parameters.userId,
+    },
+  });
 
-    if (!user) {
-      throw GetMeError.USER_NOT_FOUND;
-    }
-
-    const result: GetMeResult = {
-      user: user,
-    };
-
-    return result;
-  } catch (e) {
-    console.error(e);
-    throw GetMeError.UNKNOWN;
+  if (!user) {
+    throw GetMeError.BAD_REQUEST;
   }
+
+  return {
+    user,
+  };
 };
 
-export const GetUsers = async (parameter: {
-  page: number;
-  limit: number;
-}): Promise<GetAllUsersResult> => {
-  try {
-    const { skip, take } = getPagination(parameter.page, parameter.limit);
 
-    const users = await prisma.user.findMany({
-      orderBy: { name: "asc" },
-      skip,
-      take,
-    });
 
-    if (!users || users.length === 0) {
-      throw GetAllUsersError.NO_USERS_FOUND;
-    }
+export const getAllUsers = async (): Promise<GetAllUsersResult> => {
+  const users = await prismaClient.user.findMany();
 
-    return { users };
-  } catch (e) {
-    console.error(e);
-    throw GetAllUsersError.UNKNOWN;
-  }
+  return {
+    users,
+  };
 };

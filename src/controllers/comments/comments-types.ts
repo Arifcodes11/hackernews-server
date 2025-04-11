@@ -1,8 +1,19 @@
 import type { Comment } from "@prisma/client";
 
+export type GetCommentsResult = {
+  comments: Comment[];
+};
+
+export type CreateCommentResult = {
+  comment: Comment;
+};
+
+export type UpdateCommentResult = {
+  comment: Comment;
+};
 export enum CommentStatus {
   POST_NOT_FOUND = "POST_NOT_FOUND",
-  CREATED_SUCCESSFULLY = "CREATE_SUCCESSFULLY",
+  CREATED_SUCCEFULLY = "CREATE_SUCCESSFULLY",
   COMMENT_CREATION_FAILED = "COMMENT_CREATION_FAILED",
   COMMENT_NOT_FOUND = "COMMENT_NOT_FOUND",
   UNKNOWN = "UNKNOWN",
@@ -10,10 +21,6 @@ export enum CommentStatus {
   UPDATE_SUCCESS = "UPDATE_SUCCESS",
 }
 
-export type CreateCommentResult = {
-  comment: Comment;
-};
-
-export type CommentResult = {
-  comment: Comment[];
-};
+export type DeleteCommentResult = {
+  messaage : string;
+}

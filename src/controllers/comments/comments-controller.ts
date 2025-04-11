@@ -1,73 +1,43 @@
-import { getPagination } from "../../extras/pagination.js";
-import { prisma } from "../../extras/prisma.js";
+import { prismaClient } from "../../extras/prisma.js";
 import {
   CommentStatus,
   type CreateCommentResult,
-  type CommentResult,
-} from "./comments-type.js";
+  type GetCommentsResult,
+  type UpdateCommentResult,
+} from "./comments-types.js";
 
-export const createComment = async (params: {
-  content: string;
-  postId: string;
-  userId: string;
-}): Promise<CreateCommentResult> => {
-  try {
-    const existPostId = await prisma.post.findUnique({
-      where: { id: params.postId },
-    });
-
-    if (!existPostId) {
-      throw new Error(CommentStatus.POST_NOT_FOUND);
-    }
-
-    const result = await prisma.comment.create({
-      data: {
-        content: params.content,
-        post: { connect: { id: params.postId } },
-        user: { connect: { id: params.userId } },
-      },
-    });
-
-    return { comment: result };
-  } catch (error) {
-    console.error("Error creating comment:", error);
-    throw new Error(CommentStatus.COMMENT_CREATION_FAILED);
-  }
-};
-
-// Get all comments for a post (reverse chronological order, paginated)
-export const getAllComments = async (params: {
+export const getCommentsOnPost = async (parameters: {
   postId: string;
   page: number;
-  limit: number;
-}): Promise<{ comments: any[] }> => {
-  try {
-    const { skip, take } = getPagination(params.page, params.limit);
+}): Promise<GetCommentsResult> => {
+  const limit = 10;
+  const offset = (parameters.page - 1) * limit;
 
-    const comments = await prisma.comment.findMany({
-      where: { postId: params.postId }, // Filter by postId
-      orderBy: { createdAt: "desc" }, // Reverse chronological order
-      skip,
-      take,
-      include: {
-        user: {
-          select: {
-            id: true,
-            username: true,
-          },
-        },
-      },
-    });
+  const comments = await prismaClient.comment.findMany({
+    where: {
+      postId: parameters.postId,
+    },
+    orderBy: { createdAt: "desc" },
+    skip: offset,
+    take: limit,
+  });
+  return { comments };
+};
 
-    if (!comments || comments.length === 0) {
-      return { comments: [] };
-    }
+export const createComment = async (parameters: {
+  userId: string;
+  postId: string;
+  content: string;
+}): Promise<CreateCommentResult> => {
+  const comment = await prismaClient.comment.create({
+    data: {
+      userId: parameters.userId,
+      postId: parameters.postId,
+      content: parameters.content,
+    },
+  });
 
-    return { comments };
-  } catch (error) {
-    console.error("Error fetching comments:", error);
-    throw new Error(CommentStatus.UNKNOWN);
-  }
+  return { comment };
 };
 
 export const deleteComment = async (params: {
@@ -75,7 +45,7 @@ export const deleteComment = async (params: {
   userId: string;
 }): Promise<CommentStatus> => {
   try {
-    const comment = await prisma.comment.findUnique({
+    const comment = await prismaClient.comment.findUnique({
       where: { id: params.commentId },
     });
 
@@ -83,7 +53,7 @@ export const deleteComment = async (params: {
       return CommentStatus.COMMENT_NOT_FOUND;
     }
 
-    await prisma.comment.delete({ where: { id: params.commentId } });
+    await prismaClient.comment.delete({ where: { id: params.commentId } });
 
     return CommentStatus.DELETE_SUCCESS;
   } catch (error) {
@@ -92,29 +62,20 @@ export const deleteComment = async (params: {
   }
 };
 
-//update comment controller
-export const updateComment = async (params: {
-  commentId: string;
+export const updateComment = async (parameters: {
   userId: string;
+  commentId: string;
   content: string;
-}): Promise<CommentStatus> => {
-  try {
-    const comment = await prisma.comment.findUnique({
-      where: { id: params.commentId },
-    });
+}): Promise<UpdateCommentResult> => {
+  const comment = await prismaClient.comment.update({
+    where: {
+      id: parameters.commentId,
+      userId: parameters.userId,
+    },
+    data: {
+      content: parameters.content,
+    },
+  });
 
-    if (!comment) {
-      return CommentStatus.COMMENT_NOT_FOUND;
-    }
-
-    await prisma.comment.update({
-      where: { id: params.commentId },
-      data: { content: params.content },
-    });
-
-    return CommentStatus.UPDATE_SUCCESS;
-  } catch (error) {
-    console.error("Error updating comment:", error);
-    return CommentStatus.UNKNOWN;
-  }
+  return { comment };
 };
