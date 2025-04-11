@@ -114,13 +114,15 @@ jobs:
           username: ${{ env.ACR_USERNAME }}
           password: ${{ env.ACR_PASSWORD }}
 
-      - name: Build and push Docker image
+      - name: Build and push Docker image with both version and latest tags
         uses: docker/build-push-action@v6.15.0
         with:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ env.ACR_REGISTRY }}/${{ env.ACR_REPOSITORY_NAME }}:${{ github.ref_name }}
+          tags: |
+            ${{ env.ACR_REGISTRY }}/${{ env.ACR_REPOSITORY_NAME }}:${{ github.ref_name }}
+            ${{ env.ACR_REGISTRY }}/${{ env.ACR_REPOSITORY_NAME }}:latest
 
       # CONTAINER APP DEPLOY WITH ENVIRONMENT VARIABLES
       - name: Deploy Container App with Secrets
