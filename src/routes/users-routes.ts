@@ -1,60 +1,100 @@
 import { Hono } from "hono";
-import { tokenMiddleware } from "./middlewares/token-middleware.js";
-import { getAllUsers, getMe } from "../controllers/users/users-controller.js";
-import { GetMeError } from "../controllers/users/users-types.js";
 
+import { GetUsersError, GetMeError } from "../controllers/users/users-types.js";
 
+import { prismaClient } from "../integrations/prisma/index.js";
+import { sessionMiddleware } from "./middlewares/session-middleware.js";
+import { getPagination } from "../extras/pagination.js";
+import { GetMe, GetUserById, GetUsers } from "../controllers/users/users-controller.js";
 export const usersRoutes = new Hono();
 
-usersRoutes.get("/me", tokenMiddleware, async (context) => {
-  const userId = context.get("userId");
-  try {
-    const user = await getMe({
-      userId,
-    });
+usersRoutes.all("/me", sessionMiddleware, async (context) => {
+  const user = context.get("user");
+  const userId = user?.id;
 
-    return context.json(
-      {
-        data: user,
-      },
-      200
-    );
-  } catch (e) {
-    if (e === GetMeError.BAD_REQUEST) {
-      return context.json(
-        {
-          error: "User not found",
-        },
-        400
-      );
+  if (!userId) {
+    return context.json({ error: "User not found" }, 404);
+  }
+
+  if (context.req.method === "GET") {
+    try {
+      const result = await GetMe({
+        userId
+      });
+
+      if (!result) {
+        return context.json({ error: "User not found" }, 404);
+      }
+
+      return context.json(result, 200);
+    } catch (error) {
+      if (error === GetMeError.USER_NOT_FOUND) {
+        return context.json({ error: "User not found" }, 404);
+      }
+      if (error === GetMeError.UNKNOWN) {
+        return context.json({ error: "Unknown error" }, 500);
+      }
     }
+  } else if (context.req.method === "POST") {
+    try {
+      const { about } = await context.req.json();
 
-    return context.json(
-      {
-        message: "Internal Server Error",
-      },
-      500
-    );
+      if (!about) {
+        return context.json({ error: "About field is required" }, 400);
+      }
+
+      const updatedUser = await prismaClient.user.update({
+        where: { id: userId },
+        data: { about },
+      });
+
+      return context.json({ user: updatedUser }, 200);
+    } catch (error) {
+      console.error("Error updating About:", error);
+      return context.json({ error: "Failed to update About" }, 500);
+    }
   }
 });
 
 
-usersRoutes.get("", tokenMiddleware, async (context) => {
-  try {
-    const users = await getAllUsers();
 
-    return context.json(
-      {
-        data: users,
-      },
-      200
-    );
-  } catch (e) {
-    return context.json(
-      {
-        message: "Internal Server Error",
-      },
-      500
-    );
+
+usersRoutes.get("/", sessionMiddleware, async (context) => {
+  try {
+    const { page, limit } = getPagination(context);
+
+    const result = await GetUsers({ page, limit });
+    if (!result) {
+      return context.json({ error: "No users found" }, 404);
+    }
+    return context.json(result, 200);
+  } catch (error) {
+    if (error === GetUsersError.USERS_NOT_FOUND) {
+      return context.json({ error: "No users found" }, 404);
+    }
+    if (error === GetUsersError.PAGE_BEYOND_LIMIT) {
+      return context.json(
+        { error: "No users found on the page requested" }, 404);
+    }
+    if (error === GetUsersError.UNKNOWN) {
+      return context.json({ error: "Unknown error" }, 500);
+    }
+  }
+});
+
+
+usersRoutes.get("/:id", sessionMiddleware, async (context) => {
+  const userId = context.req.param("id"); // Get userId from URL params
+
+  try {
+    const result = await GetUserById(userId); // Use the GetUserById function to get the user's data
+
+    if (!result) {
+      return context.json({ error: "User not found" }, 404);
+    }
+
+    return context.json(result, 200);
+  } catch (error) {
+    return context.json(  "Unknown error" , 500);
   }
 });

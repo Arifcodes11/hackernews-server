@@ -2,10 +2,12 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "noEmit": false,
-    "outDir": "./dist",
-    "module": "ESNext",
+    "module": "CommonJS",
     "target": "ES2020",
-    "allowImportingTsExtensions": false
+    "outDir": "dist",
+    "moduleResolution": "node",
+    "allowImportingTsExtensions": false,
+    "verbatimModuleSyntax": false
   },
   "include": ["src"]
 }
