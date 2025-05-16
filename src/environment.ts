@@ -2,9 +2,9 @@
 
 // export const jwtSecretKey = process.env.JWT_SECRET_KEY || process.exit(1);
 
-// export const databaseUrl = process.env.DATABASE_URL || process.exit(1);
+export const databaseUrl = process.env.DATABASE_URL || process.exit(1);
 
-// export const directUrl = process.env.DIRECT_URL || process.exit(1);
+export const directUrl = process.env.DIRECT_URL || process.exit(1);
 
 export const serverUrl = process.env.SERVER_URL || process.exit(1);
 
