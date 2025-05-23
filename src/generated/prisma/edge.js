@@ -200,7 +200,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "C:\\Users\\arifc\\OneDrive\\Documents\\Dev_Developer\\hackernews-server\\src\\generated\\prisma",
+      "value": "C:\\Users\\arifc\\OneDrive\\Desktop\\HackerNews\\hackernews-server\\src\\generated\\prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -214,7 +214,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "C:\\Users\\arifc\\OneDrive\\Documents\\Dev_Developer\\hackernews-server\\prisma\\schema.prisma",
+    "sourceFilePath": "C:\\Users\\arifc\\OneDrive\\Desktop\\HackerNews\\hackernews-server\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
