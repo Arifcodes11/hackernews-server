@@ -1,6 +1,8 @@
 import { betterAuth } from "better-auth";
 import {
   betterAuthSecret,
+  googleClientId,
+  googleClientSecret,
   serverUrl,
   webClientUrl,
 } from "../../utils/environment";
@@ -15,14 +17,21 @@ export const betterAuthClient = betterAuth({
     provider: "postgresql",
   }),
   trustedOrigins: [serverUrl, webClientUrl],
-
   advanced: {
-    defaultCookieAttributes: {
-      sameSite: "none",
-      secure: true,
-      partitioned: true,
+    crossSubDomainCookies: {
+      enabled: true,
+      domain: "insight360.info",
     },
   },
+
+  
+  // advanced: {
+  //   defaultCookieAttributes: {
+  //     sameSite: "none",
+  //     secure: true,
+  //     partitioned: true,
+  //   },
+  // },
 
   user: {
     modelName: "User",
@@ -43,6 +52,10 @@ export const betterAuthClient = betterAuth({
   emailAndPassword: {
     enabled: true,
   },
-
-  // Removed socialProviders.google
+  socialProviders: {
+    google: {
+      clientId: googleClientId as string,
+      clientSecret: googleClientSecret as string,
+    },
+  },
 });
