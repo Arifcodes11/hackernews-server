@@ -1,10 +1,7 @@
 import { prismaClient } from "../../../integration/prisma";
 import { createUnsecureRoute } from "../../middleware/session-middleware";
-import { mistralApiKey, pineconeApiKey } from "../../../utils/environment";
-import { Mistral } from "@mistralai/mistralai";
 import "dotenv/config";
-import { OpenAI } from "openai";
-//import { Pinecone } from '@pinecone-database/pinecone';
+
 
  export const searchRoute = createUnsecureRoute()
 searchRoute.get("", async (context) => {
