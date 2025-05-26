@@ -27,7 +27,7 @@ jobs:
       - name: Azure Login
         uses: azure/login@v2
         with:
-          creds: ${{ secrets.AZURE_GITHUB_ACTIONS }}
+           creds: ${{ secrets.AZURE_GITHUB_ACTIONS }}
 
 
       # INFRA ENSURE BLOCKS
