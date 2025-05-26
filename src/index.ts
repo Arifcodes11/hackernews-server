@@ -1,9 +1,11 @@
 import { serve } from "@hono/node-server";
 import { Hono } from "hono";
 import { logger } from "hono/logger";
-import { authenticationsRoute } from "./routes/authentications";
 import { cors } from "hono/cors";
+
 import { webClientUrl } from "./utils/environment";
+
+import { authenticationsRoute } from "./routes/authentications";
 import { feedRoute } from "./routes/posts/feed";
 import { userRoute } from "./routes/user";
 import { likesRoute } from "./routes/likes";
@@ -15,20 +17,19 @@ import { searchRoute } from "./routes/posts/search";
 
 const allRoutes = new Hono();
 
-
 allRoutes.use(
   cors({
-    origin: webClientUrl,
+    origin: webClientUrl, // e.g. https://hackernews-arif.vercel.app
     allowMethods: ["GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"],
     allowHeaders: ["Authorization", "Content-Type"],
     exposeHeaders: ["Content-Length"],
-    credentials: true,
+    credentials: true, // important for cookies/session
     maxAge: 600,
   })
 );
 
-
 allRoutes.use("*", logger());
+
 allRoutes.route("/authentication", authenticationsRoute);
 allRoutes.route("/posts", unSecurePostsRoute);
 allRoutes.route("/users-profile", unSecureUserRoute);
@@ -40,5 +41,5 @@ allRoutes.route("/likes", likesRoute);
 allRoutes.route("/comments", commentRoute);
 
 serve(allRoutes, ({ port }) => {
-  console.log(`Running at http//:localhost:${port}`);
+  console.log(`Running at http://localhost:${port}`);
 });
