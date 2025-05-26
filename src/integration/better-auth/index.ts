@@ -7,11 +7,6 @@ import {
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { prismaClient } from "../prisma";
 
-// import { prismaAdapter } from "better-auth/adapters/prisma";
-// import { betterAuthSecret, serverUrl, webClientUrl } from "../../utils/environment";
-// import { prismaClient } from "../prisma";
-// import { betterAuth } from "better-auth";
-
 export const betterAuthClient = betterAuth({
   baseURL: serverUrl,
   basePath: "/authentication",
@@ -20,12 +15,22 @@ export const betterAuthClient = betterAuth({
     provider: "postgresql",
   }),
   trustedOrigins: [serverUrl, webClientUrl],
+  // advanced: {
+  //   crossSubDomainCookies: {
+  //     enabled: true,
+  //     domain: "insight360.info",
+  //   },
+  // },
+
+  
   advanced: {
-    crossSubDomainCookies: {
-      enabled: true,
-      domain: "insight360.info",
+    defaultCookieAttributes: {
+      sameSite: "none",
+      secure: true,
+      partitioned: true,
     },
   },
+
   user: {
     modelName: "User",
   },
@@ -45,29 +50,5 @@ export const betterAuthClient = betterAuth({
   emailAndPassword: {
     enabled: true,
   },
+
 });
-
-// export const betterAuthClient = betterAuth({
-//   baseURL: serverUrl,
-//   basePath: "/authentication",
-//   secret: betterAuthSecret,
-//   database: prismaAdapter(prismaClient, {
-//     provider: "postgresql",
-//   }),
-//   trustedOrigins: [serverUrl, webClientUrl],
-//   advanced: {
-//     crossSubDomainCookies: {
-//       enabled: true,
-//       domain: "hackernews.victoriousglacier-117642ef.centralindia.azurecontainerapps.io",
-//     },
-//   },
-//   user: { modelName: "User" },
-//   session: {
-//     modelName: "Session",
-//     cookieCache: { enabled: true, maxAge: 60 * 60 },
-//   },
-//   account: { modelName: "Account" },
-//   verification: { modelName: "Verification" },
-//   emailAndPassword: { enabled: true },
-// });
-

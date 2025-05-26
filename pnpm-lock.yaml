@@ -14,8 +14,14 @@ importers:
       '@hono/zod-validator':
         specifier: ^0.5.0
         version: 0.5.0(hono@4.7.8)(zod@3.24.4)
+      '@mistralai/mistralai':
+        specifier: ^1.6.0
+        version: 1.6.0(zod@3.24.4)
+      '@pinecone-database/pinecone':
+        specifier: ^6.0.0
+        version: 6.0.0
       '@prisma/client':
-        specifier: ^6.7.0
+        specifier: 6.7.0
         version: 6.7.0(prisma@6.7.0(typescript@5.8.3))(typescript@5.8.3)
       better-auth:
         specifier: ^1.2.7
@@ -37,8 +43,8 @@ importers:
         version: 3.24.4
     devDependencies:
       '@types/node':
-        specifier: ^20.17.50
-        version: 20.17.50
+        specifier: ^20.11.17
+        version: 20.17.32
       prisma:
         specifier: ^6.7.0
         version: 6.7.0(typescript@5.8.3)
@@ -296,8 +302,8 @@ packages:
   '@types/node@18.19.101':
     resolution: {integrity: sha512-Ykg7fcE3+cOQlLUv2Ds3zil6DVjriGQaSN/kEpl5HQ3DIGM6W0F2n9+GkWV4bRt7KjLymgzNdTnSKCbFUUJ7Kw==}
 
-  '@types/node@20.17.50':
-    resolution: {integrity: sha512-Mxiq0ULv/zo1OzOhwPqOA13I81CV/W3nvd3ChtQZRT5Cwz3cr0FKo/wMSsbTqL3EXpaBAEQhva2B8ByRkOIh9A==}
+  '@types/node@20.17.32':
+    resolution: {integrity: sha512-zeMXFn8zQ+UkjK4ws0RiOC9EWByyW1CcVmLe+2rQocXRsGEDxUCwPEIVgpsGcLHS/P8JkT0oa3839BRABS0oPw==}
 
   abort-controller@3.0.0:
     resolution: {integrity: sha512-h8lQ8tacZYnR3vNQTgibj+tODHI5/+l06Au2Pcriv/Gmet0eaj4TwWH41sO9wnHDiQsEj19q0drzdWdeAHtweg==}
@@ -744,14 +750,14 @@ snapshots:
 
   '@types/node-fetch@2.6.12':
     dependencies:
-      '@types/node': 20.17.50
+      '@types/node': 20.17.32
       form-data: 4.0.2
 
   '@types/node@18.19.101':
     dependencies:
       undici-types: 5.26.5
 
-  '@types/node@20.17.50':
+  '@types/node@20.17.32':
     dependencies:
       undici-types: 6.19.8
 
