@@ -18,7 +18,8 @@ const allRoutes = new Hono();
 
 allRoutes.use(
   cors({
-    origin: webClientUrl,
+    //origin: webClientUrl,
+    origin: ['https://hackernews-arif.vercel.app/'],
     allowMethods: ["GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"],
     allowHeaders: ["Authorization", "Content-Type"],
     exposeHeaders: ["Content-Length"],
