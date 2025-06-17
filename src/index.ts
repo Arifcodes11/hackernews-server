@@ -18,8 +18,7 @@ const allRoutes = new Hono();
 
 allRoutes.use(
   cors({
-    origin: webClientUrl,
-    //origin: ['https://hackernews-arif.vercel.app/'],
+    origin: [webClientUrl, 'http://localhost:5173', 'http://localhost:3000'],
     allowMethods: ["GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"],
     allowHeaders: ["Authorization", "Content-Type"],
     exposeHeaders: ["Content-Length"],

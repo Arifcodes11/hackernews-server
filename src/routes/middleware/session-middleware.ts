@@ -25,19 +25,28 @@ export const createSecureRoute = (): Hono<SecureSession> => {
 };
 
 export const authenticationMiddleware = createMiddleware<SecureSession>(
-  
   async (context, next) => {
-    console.log("Authentication middleware called");
-    const session = await betterAuthClient.api.getSession({
-      headers: context.req.raw.headers,
-    });
+    try {
+      console.log("Authentication middleware called");
+      const session = await betterAuthClient.api.getSession({
+        headers: context.req.raw.headers,
+      });
 
-    if (!session) {
-      throw new HTTPException(401);
+      if (!session) {
+        console.log("No session found");
+        throw new HTTPException(401, { message: "No session found" });
+      }
+
+      console.log("Session found for user:", session.user.id);
+      context.set("user", session.user as User);
+      context.set("session", session.session as Session);
+      return await next();
+    } catch (error) {
+      console.error("Authentication error:", error);
+      if (error instanceof HTTPException) {
+        throw error;
+      }
+      throw new HTTPException(401, { message: "Authentication failed" });
     }
-
-    context.set("user", session.user as User);
-    context.set("session", session.session as Session);
-    return await next();
   }
 );
