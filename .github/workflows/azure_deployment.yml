@@ -27,8 +27,7 @@ jobs:
       - name: Azure Login
         uses: azure/login@v2
         with:
-          creds: '{"clientId":"${{ secrets.AZURE_CLIENT_ID }}","clientSecret":"${{ secrets.AZURE_CLIENT_SECRET }}","subscriptionId":"${{ secrets.AZURE_SUBSCRIPTION_ID }}","tenantId":"${{ secrets.AZURE_TENANT_ID }}"}'
-
+          creds: ${{ secrets.AZURE_GITHUB_ACTIONS }}
 
       # INFRA ENSURE BLOCKS
       - name: Check Resource Group exists
@@ -155,5 +154,5 @@ jobs:
                 DIRECT_URL=${{ secrets.DIRECT_URL }} \
                 SERVER_URL=${{ secrets.SERVER_URL }} \
                 WEB_CLIENT_URL=${{ secrets.WEB_CLIENT_URL }} \
-                BETTER_AUTH_SECRET=${{ secrets.BETTER_AUTH_SECRET }} \
-               
+                WEB_CLIENT_URL_2=${{ secrets.WEB_CLIENT_URL_2 }} 
+                BETTER_AUTH_SECRET=${{ secrets.BETTER_AUTH_SECRET }} 
