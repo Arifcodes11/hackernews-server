@@ -58,15 +58,17 @@ import { postsRoute } from "./routes/posts";
 import { unSecureUserRoute } from "./routes/unSecureUser";
 import { searchRoute } from "./routes/posts/search";
 
-const allRoutes = new Hono();
+const app = new Hono();
 
-console.log("🟢 Web client URL:", webClientUrl);
+// ✅ Optional test route for health check
+app.get("/", (c) => c.text("✅ API is running"));
 
-allRoutes.use(
+// ✅ CORS setup
+app.use(
   cors({
     origin: (origin) => {
-      const allowedOrigins = [webClientUrl, 'http://localhost:5173', 'http://localhost:3000'];
-      if (origin && allowedOrigins.includes(origin)) {
+      const allowed = [webClientUrl, "http://localhost:5173", "http://localhost:3000"];
+      if (allowed.includes(origin ?? "")) {
         return origin;
       }
       return null;
@@ -79,18 +81,21 @@ allRoutes.use(
   })
 );
 
-allRoutes.use("*", logger());
+app.use("*", logger());
 
-allRoutes.route("/authentication", authenticationsRoute);
-allRoutes.route("/posts", unSecurePostsRoute);
-allRoutes.route("/users-profile", unSecureUserRoute);
-allRoutes.route("/feeds/search", searchRoute);
-allRoutes.route("/posts", postsRoute);
-allRoutes.route("/feeds", feedRoute);
-allRoutes.route("/profile", userRoute);
-allRoutes.route("/likes", likesRoute);
-allRoutes.route("/comments", commentRoute);
+app.route("/authentication", authenticationsRoute);
+app.route("/posts", unSecurePostsRoute);
+app.route("/users-profile", unSecureUserRoute);
+app.route("/feeds/search", searchRoute);
+app.route("/posts", postsRoute);
+app.route("/feeds", feedRoute);
+app.route("/profile", userRoute);
+app.route("/likes", likesRoute);
+app.route("/comments", commentRoute);
 
-serve(allRoutes, ({ port }) => {
-  console.log(`🚀 Server running at http://localhost:${port}`);
+// ✅ Bind to correct hostname and port for Azure
+serve({
+  fetch: app.fetch,
+  port: process.env.PORT ? Number(process.env.PORT) : 3000,
+  hostname: "0.0.0.0",
 });
