@@ -2,18 +2,23 @@ FROM node:22.1.0
 
 WORKDIR /app
 
+# ✅ Copy files in build cache-friendly order
 COPY package*.json ./
 COPY tsconfig*.json ./
+COPY prisma ./prisma
 COPY src ./src
 
-
-COPY . .
+# ✅ Install dependencies
 RUN npm install
 
-RUN if [ -f "./prisma/schema.prisma" ]; then npx prisma generate; else echo "Skipping prisma generate"; fi
+# ✅ Generate Prisma client
+RUN npx prisma generate
 
+# ✅ Build TypeScript project
 RUN npm run build
 
+# ✅ Expose port for Azure
 EXPOSE 3000
 
+# ✅ Run the app in prod mode
 CMD ["npm", "start"]
