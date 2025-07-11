@@ -1,4 +1,4 @@
-import { betterAuth } from "better-auth";
+// import { betterAuth } from "better-auth";
 import {
   betterAuthSecret,
   serverUrl,
@@ -6,33 +6,28 @@ import {
 } from "../../utils/environment";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { prismaClient } from "../prisma";
+import { betterAuth } from "better-auth";
 
 export const betterAuthClient = betterAuth({
   baseURL: serverUrl,
   basePath: "/authentication",
   secret: betterAuthSecret,
+
   database: prismaAdapter(prismaClient, {
     provider: "postgresql",
   }),
-  trustedOrigins: [serverUrl, webClientUrl],
-  // advanced: {
-  //   crossSubDomainCookies: {
-  //     enabled: true,
-  //     domain: "insight360.info",
-  //   },
-  // },
 
-  
+  trustedOrigins: [serverUrl, webClientUrl],
+
   advanced: {
     defaultCookieAttributes: {
-      sameSite: "lax",
-      secure: process.env.NODE_ENV === "production",
-      path: "/",
+      sameSite: "none", // ✅ for cross-site cookies
+      secure: true,     // ✅ must be true for SameSite: none
       httpOnly: true,
+      path: "/",
     },
     crossSubDomainCookies: {
-      enabled: process.env.NODE_ENV === "production",
-      domain: process.env.COOKIE_DOMAIN || undefined,
+      enabled: false, // ❌ not using same root domain (e.g. *.insight360.info)
     },
   },
 
@@ -43,7 +38,7 @@ export const betterAuthClient = betterAuth({
     modelName: "Session",
     cookieCache: {
       enabled: true,
-      maxAge: 60 * 60,
+      maxAge: 60 * 60, // 1 hour
     },
   },
   account: {
@@ -55,5 +50,4 @@ export const betterAuthClient = betterAuth({
   emailAndPassword: {
     enabled: true,
   },
-
 });
