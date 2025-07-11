@@ -18,7 +18,7 @@
 
 // allRoutes.use(
 //   cors({
-//     origin: [webClientUrl, 'http://localhost:5173', 'http://localhost:3000'],
+//     origin: [webClientUrl, 'http://localhost:5173', 'http://localhost:3000', 'http://localhost:4000'],
 //     allowMethods: ["GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"],
 //     allowHeaders: ["Authorization", "Content-Type"],
 //     exposeHeaders: ["Content-Length"],
@@ -67,7 +67,7 @@ app.get("/", (c) => c.text("✅ API is running"));
 app.use(
   cors({
     origin: (origin) => {
-      const allowed = [webClientUrl, "http://localhost:5173", "http://localhost:3000"];
+      const allowed = [webClientUrl, "http://localhost:5173", "http://localhost:3000", "http://localhost:4000"];
       if (allowed.includes(origin ?? "")) {
         return origin;
       }
